@@ -61,3 +61,7 @@ typings/
 .next
 
 credentials\.json
+
+fontys\.json
+
+token\.json
