@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/yeahspang/CalendarUpdater#readme",
   "dependencies": {
-    "googleapis": "^27.0.0",
-    "puppeteer": "^1.8.0"
+    "googleapis": "^27.0.0"
   }
 }
