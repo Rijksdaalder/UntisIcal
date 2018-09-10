@@ -1,0 +1,25 @@
+{
+  "name": "calendarupdater",
+  "version": "1.0.0",
+  "description": "A tool to update your Google calendar using a Untis schedule",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yeahspang/CalendarUpdater.git"
+  },
+  "keywords": [
+    "schedule"
+  ],
+  "author": "Sjoerd Rievers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yeahspang/CalendarUpdater/issues"
+  },
+  "homepage": "https://github.com/yeahspang/CalendarUpdater#readme",
+  "dependencies": {
+    "googleapis": "^27.0.0"
+  }
+}
