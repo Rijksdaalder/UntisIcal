@@ -1,7 +1,7 @@
 const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
-const moment = require('moment');
+const moment = require('moment-timezone');
 const http = require('http');
 const ical = require('ical-generator');
 const schedule = require('./schedule.js');
@@ -123,7 +123,7 @@ function listEvents(auth) {
       url: 'ical.arcticiced.com',
 	    prodId: {company: 'unknown', product: 'Fontys Ical'},
 	    name: 'TIPA feed',
-	    timezone: 'Europe/Berlin'
+	    timezone: 'Europe/Amsterdam'
 	});
 
 
@@ -140,9 +140,16 @@ function listEvents(auth) {
         var data = data['iPlannerRooster'];
         for (var i = 0; i < data.length; i++) {
           var summary = data[i]['Vak'] + " in lokaal: " + data[i]['Lokaal'] + " van docent " + data[i]['DocentAfkorting'];
+
+
+          var format = ""
+          var start = moment(data[i]['Start']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
+          var end = moment(data[i]['Eind']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
+          console.log("Start: " + start);
+          console.log("End: " + end);
           var event = cal.createEvent({
-            start: data[i]['Start'],
-            end: data[i]['Eind'],
+            start: start,
+            end: end,
             summary: summary,
           });
         }

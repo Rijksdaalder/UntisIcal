@@ -28,7 +28,6 @@ function GetScheduleData(callback) {
 	request.get(endpoint, function(err, response, body) {
 		if(err) callback(err);
 		var obj = JSON.parse(body);
-		console.log(obj);
 		callback(null, obj);
 	});
 
