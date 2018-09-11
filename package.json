@@ -22,6 +22,7 @@
   "dependencies": {
     "googleapis": "^27.0.0",
     "ical-generator": "^1.1.1",
+    "moment-timezone": "^0.5.21",
     "request": "^2.88.0"
   }
 }
