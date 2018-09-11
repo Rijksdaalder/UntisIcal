@@ -1,6 +1,9 @@
 const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
+const moment = require('moment');
+const http = require('http');
+const ical = require('ical-generator');
 const schedule = require('./schedule.js');
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
@@ -112,5 +115,40 @@ function listEvents(auth) {
   //     console.log('No upcoming events found.');
   //   }
   // });
-  schedule.GetScheduleData();
+
+  	
+  	//first create ical entity
+  	const cal = ical({
+	    domain: 'ical.arcticiced.com',
+      url: 'ical.arcticiced.com',
+	    prodId: {company: 'unknown', product: 'Fontys Ical'},
+	    name: 'TIPA feed',
+	    timezone: 'Europe/Berlin'
+	});
+
+
+    var server = http.createServer(function(req, res) {
+        
+    });
+    server.listen(3000, function() {
+      console.log('Server running at port 3000');
+    });
+    server.on('request', function(request, response) {
+      console.log("got a request, refreshing data");
+      schedule.GetScheduleData(function(err, data) {
+        if(err) console.log(err);
+        var data = data['iPlannerRooster'];
+        for (var i = 0; i < data.length; i++) {
+          var summary = data[i]['Vak'] + " in lokaal: " + data[i]['Lokaal'] + " van docent " + data[i]['DocentAfkorting'];
+          var event = cal.createEvent({
+            start: data[i]['Start'],
+            end: data[i]['Eind'],
+            summary: summary,
+          });
+        }
+        cal.serve(response);
+      });
+    });
+
+
 }
