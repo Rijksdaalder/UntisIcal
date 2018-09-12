@@ -9,6 +9,9 @@ const schedule = require('./schedule.js');
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 const TOKEN_PATH = 'token.json';
 
+
+var cached_response = { "fetchedAt": null, "data": null };
+
 // Load client secrets from a local file.
 fs.readFile('credentials.json', (err, content) => {
   if (err) return console.log('Error loading client secret file:', err);
@@ -135,27 +138,44 @@ function listEvents(auth) {
     });
     server.on('request', function(request, response) {
       console.log("got a request, refreshing data");
-      schedule.GetScheduleData(function(err, data) {
-        if(err) console.log(err);
-        var data = data['iPlannerRooster'];
-        for (var i = 0; i < data.length; i++) {
-          var summary = data[i]['Vak'] + " in lokaal: " + data[i]['Lokaal'] + " van docent " + data[i]['DocentAfkorting'];
 
+      var yesterday = moment().subtract(1, "day");
+      if(cached_response['fetchedAt'] == null || cached_response['fetchedAt'].diff(yesterday, 'days') >= 1) {
+      	//Make a new request and cache it
+      	schedule.GetScheduleData(function(err, data) {
+	        if(err) console.log(err);
+        	var data = data['iPlannerRooster'];
+        	cached_response['fetchedAt'] = moment();
+        	cached_response['data'] = data;
+        	setCalendarData(data, cal, function (err) {
+        		cal.serve(response);
+        	});
+      	});
+      }else {
+      	//Just serve the cached copy
+      	setCalendarData(cached_response['data'], cal, function(err) {
+        	cal.serve(response);
+      	});
+      }
 
-          var format = ""
-          var start = moment(data[i]['Start']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
-          var end = moment(data[i]['Eind']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
-          console.log("Start: " + start);
-          console.log("End: " + end);
-          var event = cal.createEvent({
-            start: start,
-            end: end,
-            summary: summary,
-          });
-        }
-        cal.serve(response);
-      });
     });
+}
+
+function setCalendarData(data, cal, callback) {
+    for (var i = 0; i < data.length; i++) {
+      var summary = data[i]['Vak'] + " in lokaal: " + data[i]['Lokaal'] + " van docent " + data[i]['DocentAfkorting'];
 
 
+      var format = ""
+      var start = moment(data[i]['Start']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
+      var end = moment(data[i]['Eind']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
+      console.log("Start: " + start);
+      console.log("End: " + end);
+      var event = cal.createEvent({
+        start: start,
+        end: end,
+        summary: summary,
+      });
+    }
+    callback(null);
 }
