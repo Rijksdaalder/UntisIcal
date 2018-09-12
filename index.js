@@ -162,20 +162,33 @@ function listEvents(auth) {
 }
 
 function setCalendarData(data, cal, callback) {
+	//Remove duplicates
+	for (var i = 0; i < data.length; i++) {
+		for (var j = 1; j < data.length; j++) {
+			if(data[i]['Start'] == data[j]['Start'] && data[i]['Eind'] == data[j]['Eind']) {
+				//is duplicate
+				console.log("Found a duplicate with time " + data[i]['Start']);
+				data.splice(j, 1);
+			}
+		}
+	}
+
+
+	//Prepare actual data
     for (var i = 0; i < data.length; i++) {
-      var summary = data[i]['Vak'] + " in lokaal: " + data[i]['Lokaal'] + " van docent " + data[i]['DocentAfkorting'];
+    	if(data[i] !== null) {
+	      var summary = data[i]['Vak'] + " in lokaal: " + data[i]['Lokaal'] + " van docent " + data[i]['DocentAfkorting'];
 
 
-      var format = ""
-      var start = moment(data[i]['Start']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
-      var end = moment(data[i]['Eind']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
-      console.log("Start: " + start);
-      console.log("End: " + end);
-      var event = cal.createEvent({
-        start: start,
-        end: end,
-        summary: summary,
-      });
+	      var format = ""
+	      var start = moment(data[i]['Start']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
+	      var end = moment(data[i]['Eind']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
+	      var event = cal.createEvent({
+	        start: start,
+	        end: end,
+	        summary: summary,
+	      });
+	  }
     }
     callback(null);
 }
