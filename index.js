@@ -8,6 +8,7 @@ const schedule = require('./schedule.js');
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 const TOKEN_PATH = 'token.json';
+const version = "1.1.2";
 
 
 // Load client secrets from a local file.
@@ -21,6 +22,7 @@ fs.readFile('credentials.json', (err, content) => {
 
 });
 
+console.log("CalendarUpdater version " + version + "|Author(Sjoerd)");
 
 /**
  * Checks if there is a credential JSON file available
@@ -108,7 +110,8 @@ function listEvents(auth) {
       console.log('Server running at port 3000');
     });
     server.on('request', function(request, response) {
+    	console.log(request);
       console.log("got a request, returning calendar ical");
-      scheduleInstance.GetSchedule(response);
+      //scheduleInstance.GetSchedule(response);
     });
 }
