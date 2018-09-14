@@ -110,8 +110,7 @@ function listEvents(auth) {
       console.log('Server running at port 3000');
     });
     server.on('request', function(request, response) {
-    	console.log(request);
       console.log("got a request, returning calendar ical");
-      //scheduleInstance.GetSchedule(response);
+      scheduleInstance.GetSchedule(response);
     });
 }
