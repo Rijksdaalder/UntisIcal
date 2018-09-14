@@ -10,8 +10,6 @@ const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 const TOKEN_PATH = 'token.json';
 
 
-var cached_response = { "fetchedAt": null, "data": null };
-
 // Load client secrets from a local file.
 fs.readFile('credentials.json', (err, content) => {
   if (err) return console.log('Error loading client secret file:', err);
@@ -98,36 +96,9 @@ function getAccessToken(oAuth2Client, callback) {
  * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
  */
 function listEvents(auth) {
-  // const calendar = google.calendar({version: 'v3', auth});
-  // calendar.events.list({
-  //   calendarId: 'primary',
-  //   timeMin: (new Date()).toISOString(),
-  //   maxResults: 10,
-  //   singleEvents: true,
-  //   orderBy: 'startTime',
-  // }, (err, res) => {
-  //   if (err) return console.log('The API returned an error: ' + err);
-  //   const events = res.data.items;
-  //   if (events.length) {
-  //     console.log('Upcoming 10 events:');
-  //     events.map((event, i) => {
-  //       const start = event.start.dateTime || event.start.date;
-  //       console.log(`${start} - ${event.summary}`);
-  //     });
-  //   } else {
-  //     console.log('No upcoming events found.');
-  //   }
-  // });
-
   	
-  	//first create ical entity
-  	const cal = ical({
-	    domain: 'ical.arcticiced.com',
-      url: 'ical.arcticiced.com',
-	    prodId: {company: 'unknown', product: 'Fontys Ical'},
-	    name: 'TIPA feed',
-	    timezone: 'Europe/Amsterdam'
-	});
+  	//first create schedule entity
+  	const scheduleInstance = new schedule.Schedule(43, "TIPA", false);
 
 
     var server = http.createServer(function(req, res) {
@@ -137,58 +108,7 @@ function listEvents(auth) {
       console.log('Server running at port 3000');
     });
     server.on('request', function(request, response) {
-      console.log("got a request, refreshing data");
-
-      var yesterday = moment().subtract(1, "day");
-      if(cached_response['fetchedAt'] == null || cached_response['fetchedAt'].diff(yesterday, 'days') >= 1) {
-      	//Make a new request and cache it
-      	schedule.GetScheduleData(function(err, data) {
-	        if(err) console.log(err);
-        	var data = data['iPlannerRooster'];
-        	cached_response['fetchedAt'] = moment();
-        	cached_response['data'] = data;
-        	setCalendarData(data, cal, function (err) {
-        		cal.serve(response);
-        	});
-      	});
-      }else {
-      	//Just serve the cached copy
-      	setCalendarData(cached_response['data'], cal, function(err) {
-        	cal.serve(response);
-      	});
-      }
-
+      console.log("got a request, returning calendar ical");
+      scheduleInstance.GetSchedule(response);
     });
-}
-
-function setCalendarData(data, cal, callback) {
-	//Remove duplicates
-	for (var i = 0; i < data.length; i++) {
-		for (var j = 1; j < data.length; j++) {
-			if(data[i]['Start'] == data[j]['Start'] && data[i]['Eind'] == data[j]['Eind']) {
-				//is duplicate
-				console.log("Found a duplicate with time " + data[i]['Start']);
-				data.splice(j, 1);
-			}
-		}
-	}
-
-
-	//Prepare actual data
-    for (var i = 0; i < data.length; i++) {
-    	if(data[i] !== null) {
-	      var summary = data[i]['Vak'] + " in lokaal: " + data[i]['Lokaal'] + " van docent " + data[i]['DocentAfkorting'];
-
-
-	      var format = ""
-	      var start = moment(data[i]['Start']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
-	      var end = moment(data[i]['Eind']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
-	      var event = cal.createEvent({
-	        start: start,
-	        end: end,
-	        summary: summary,
-	      });
-	  }
-    }
-    callback(null);
 }
