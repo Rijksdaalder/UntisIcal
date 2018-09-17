@@ -80,28 +80,28 @@ class Schedule {
 		var _this = this;
 		//First clear calendar of data
 		_this.calendar.clear();
-
+		var shadowCopy = data.slice();
 		//Remove duplicates in the data
-		for (var i = 0; i < data.length; i++) {
-			for (var j = 1; j < data.length; j++) {
-				if(data[i]['Start'] == data[j]['Start'] && data[i]['Eind'] == data[j]['Eind']) {
+		for (var i = 0; i < shadowCopy.length; i++) {
+			for (var j = 1; j < shadowCopy.length; j++) {
+				if(shadowCopy[i]['Start'] == shadowCopy[j]['Start'] && shadowCopy[i]['Eind'] == shadowCopy[j]['Eind']) {
 					//is duplicate
-					console.log("Found a duplicate with time " + data[i]['Start']);
-					data.splice(j, 1);
+					console.log("Found a duplicate with time " + shadowCopy[i]['Start']);
+					shadowCopy.splice(j, 1);
 				}
 			}
 		}
 
 
 		//Prepare actual data
-	    for (var i = 0; i < data.length; i++) {
-	    	if(data[i] !== null) {
-		      var summary = data[i]['Vak'] + " in lokaal: " + data[i]['Lokaal'] + " van docent " + data[i]['DocentAfkorting'];
+	    for (var i = 0; i < shadowCopy.length; i++) {
+	    	if(shadowCopy[i] !== null) {
+		      var summary = shadowCopy[i]['Vak'] + " in lokaal: " + shadowCopy[i]['Lokaal'] + " van docent " + shadowCopy[i]['DocentAfkorting'];
 
 
 		      var format = ""
-		      var start = moment(data[i]['Start']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
-		      var end = moment(data[i]['Eind']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
+		      var start = moment(shadowCopy[i]['Start']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
+		      var end = moment(shadowCopy[i]['Eind']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
 		      var event = _this.calendar.createEvent({
 		        start: start,
 		        end: end,
