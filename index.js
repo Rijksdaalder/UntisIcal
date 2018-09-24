@@ -5,6 +5,7 @@ const moment = require('moment-timezone');
 const http = require('http');
 const ical = require('ical-generator');
 const schedule = require('./schedule.js');
+const url = require('url');
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 const TOKEN_PATH = 'token.json';
@@ -110,7 +111,14 @@ function listEvents(auth) {
       console.log('Server running at port 3000');
     });
     server.on('request', function(request, response) {
+      var params = url.parse(request.url, true).query;
       console.log("got a request, returning calendar ical");
+
+      if(params.instituteId != null && params.className != null) {
+          scheduleInstance.instituteId = params.instituteId;
+          scheduleInstance.className = params.className;
+      }
       scheduleInstance.GetSchedule(response);
+
     });
 }

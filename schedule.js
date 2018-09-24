@@ -86,7 +86,6 @@ class Schedule {
 			for (var j = 1; j < shadowCopy.length; j++) {
 				if(shadowCopy[i]['Start'] == shadowCopy[j]['Start'] && shadowCopy[i]['Eind'] == shadowCopy[j]['Eind']) {
 					//is duplicate
-					console.log("Found a duplicate with time " + shadowCopy[i]['Start']);
 					shadowCopy.splice(j, 1);
 				}
 			}
