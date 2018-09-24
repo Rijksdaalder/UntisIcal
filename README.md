@@ -1,4 +1,4 @@
-# CalendarUpdater
+# Untis Ical
 A handy tool to update your Google calendar by parsing an Untis schedule
 
 # What does it do?
