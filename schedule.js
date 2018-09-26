@@ -13,7 +13,7 @@ class Schedule {
 
 	constructor(instituteId, className, ShouldGetLoginCookies = false) {
 		//Get the credentials
-		this.cachedData =  { "fetchedAt": null, "data": null };;
+		this.clearCache();
 		this.credentials = JSON.parse(fs.readFileSync(SCHEDULE_CREDENTIALS_PATH, 'utf8'));
 		this.instituteId = instituteId == null ? 43 : instituteId; //43 = Fontys Venlo
 		this.className = className == null ? "TIPA" : className;
@@ -32,6 +32,14 @@ class Schedule {
 			});
 		}
 
+	}
+	updateClassData(instituteId, classname) {
+		this.clearCache();
+		this.instituteId = instituteId;
+		this.className = classname;
+	}
+	clearCache() {
+		this.cachedData = { "fetchedAt": null, "data": null };
 	}
 	loginToService(callback) {
 		var payload = {'username': credentials.username,'password': credentials.password, 'vhost': 'standard'}
@@ -99,8 +107,8 @@ class Schedule {
 
 
 		      var format = ""
-		      var start = moment(shadowCopy[i]['Start']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
-		      var end = moment(shadowCopy[i]['Eind']).tz("Europe/Amsterdam").subtract("2", "hour").toDate();
+		      var start = moment(shadowCopy[i]['Start']).tz("Europe/Amsterdam").toDate();
+		      var end = moment(shadowCopy[i]['Eind']).tz("Europe/Amsterdam").toDate();
 		      var event = _this.calendar.createEvent({
 		        start: start,
 		        end: end,
