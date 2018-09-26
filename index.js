@@ -10,6 +10,7 @@ const url = require('url');
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 const TOKEN_PATH = 'token.json';
 const version = "1.2.2";
+const port = 61033;
 
 
 console.log("CalendarUpdater version " + version + "|Author(Sjoerd)");
@@ -28,8 +29,8 @@ function instantiateServer() {
   	const scheduleInstance = new schedule.Schedule(43, "TIPA", false);
 
     var server = http.createServer();
-    server.listen(3000, function() {
-      console.log('Server running at port 3000');
+    server.listen(port, function() {
+      console.log('Server running at port ' + port);
     });
     server.on('request', function(request, response) {
       var params = url.parse(request.url, true).query;
