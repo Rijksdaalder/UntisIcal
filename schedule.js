@@ -14,7 +14,7 @@ class Schedule {
 	constructor(instituteId, className, ShouldGetLoginCookies = false) {
 		//Get the credentials
 		this.clearCache();
-		//this.credentials = JSON.parse(fs.readFileSync(SCHEDULE_CREDENTIALS_PATH, 'utf8'));
+		this.credentials = JSON.parse(fs.readFileSync(SCHEDULE_CREDENTIALS_PATH, 'utf8'));
 		this.instituteId = instituteId == null ? 43 : instituteId; //43 = Fontys Venlo
 		this.className = className == null ? "TIPA" : className;
 		this.calendar = ical({
@@ -121,4 +121,4 @@ class Schedule {
 
 }
 
-module.exports = {"Schedule": Schedule};
+module.exports = {"Schedule": Schedule, "SCHEDULE_CREDENTIALS_PATH": SCHEDULE_CREDENTIALS_PATH};

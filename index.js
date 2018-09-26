@@ -9,7 +9,7 @@ const url = require('url');
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 const TOKEN_PATH = 'token.json';
-const version = "1.2.1";
+const version = "1.2.2";
 
 
 console.log("CalendarUpdater version " + version + "|Author(Sjoerd)");
