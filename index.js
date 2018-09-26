@@ -40,6 +40,7 @@ function instantiateServer() {
         console.log("params are not null");
           if(scheduleInstance.className != params.className) {
             console.log("Clearing cache & updating class data");
+            console.log("instituteId: " + params.instituteId + " Class: " + params.className);
             scheduleInstance.updateClassData(params.instituteId, params.className);
           }
       }
