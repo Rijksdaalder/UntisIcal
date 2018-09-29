@@ -6,9 +6,9 @@ Calendar updates parses & processes an Untis schedule and formats it to become a
 Using this tool you can synchronize your schedule with your appointments by using the generated file as an update link.
 
 # How do I use it
-The server's listener defaults to port `3000` on `localhost`.
+The server's listener defaults to port `61033` on `localhost`.
 ## Setup
-Create a folder to hold the Node JS project  
+The git command later on will automatically create a folder. You may create an additional folder to hold the Node JS project, if desired.
 `mkdir scheduler`  
 `cd scheduler`  
 Clone the repository in the before defined location  
