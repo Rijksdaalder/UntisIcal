@@ -1,6 +1,6 @@
 {
-  "name": "calendarupdater",
-  "version": "1.0.0",
+  "name": "UntisIcal",
+  "version": "1.2.3",
   "description": "A tool to update your Google calendar using a Untis schedule",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yeahspang/CalendarUpdater.git"
+    "url": "git+https://github.com/yeahspang/UntisIcal.git"
   },
   "keywords": [
     "schedule"
@@ -16,9 +16,9 @@
   "author": "Sjoerd Rievers",
   "license": "Unlicense",
   "bugs": {
-    "url": "https://github.com/yeahspang/CalendarUpdater/issues"
+    "url": "https://github.com/yeahspang/UntisIcal/issues"
   },
-  "homepage": "https://github.com/yeahspang/CalendarUpdater#readme",
+  "homepage": "https://github.com/yeahspang/UntisIcal#readme",
   "dependencies": {
     "googleapis": "^27.0.0",
     "ical-generator": "^1.1.1",
